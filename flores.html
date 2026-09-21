@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Te amo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Work+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night-deep:#141a33; --night:#1e2749; --night-soft:#2a3560;
+    --cream:#f8f3e6; --cream-dim:#cdc3ab;
+    --yellow:#f2c14e; --yellow-bright:#ffd873; --yellow-deep:#c9861a;
+    --sage:#6d8f5b; --sage-dark:#48633c; --gold:#d8b768; --glow:#ffe9a8;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --night-deep:#141a33; --night:#1e2749; --night-soft:#2a3560;
+      --cream:#f8f3e6; --cream-dim:#cdc3ab;
+      --yellow:#f2c14e; --yellow-bright:#ffd873; --yellow-deep:#c9861a;
+      --sage:#6d8f5b; --sage-dark:#48633c; --gold:#d8b768; --glow:#ffe9a8;
+    }
+  }
+  :root[data-theme="dark"]{
+    --night-deep:#141a33; --night:#1e2749; --night-soft:#2a3560;
+    --cream:#f8f3e6; --cream-dim:#cdc3ab;
+    --yellow:#f2c14e; --yellow-bright:#ffd873; --yellow-deep:#c9861a;
+    --sage:#6d8f5b; --sage-dark:#48633c; --gold:#d8b768; --glow:#ffe9a8;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--night);
+    background-image:radial-gradient(ellipse 90% 55% at 50% 0%, var(--night-soft) 0%, var(--night) 55%, var(--night-deep) 100%);
+    color:var(--cream);
+    font-family:'Work Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    position:relative;overflow-x:hidden;
+  }
+
+  .stars{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
+  .star{position:absolute;border-radius:50%;background:#fff;}
+  .horizon{position:fixed;left:0;right:0;bottom:0;height:38vh;
+    background:radial-gradient(ellipse 70% 100% at 50% 100%, rgba(242,193,78,0.12) 0%, rgba(242,193,78,0) 70%);
+    pointer-events:none;z-index:1;}
+
+  /* ---------- Tulip component ---------- */
+  .tulip{appearance:none;-webkit-appearance:none;background:transparent;border:0;padding:6px;margin:0;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;border-radius:10px;}
+  .tulip svg{display:block;overflow:visible;width:clamp(34px,6.2vw,52px);height:auto;}
+  .tulip:focus-visible{outline:2px solid var(--glow);outline-offset:5px;}
+  .glow-behind{fill:var(--glow);filter:url(#soft-blur);opacity:0;transition:opacity .8s ease;animation:hint-pulse 3.4s ease-in-out infinite;animation-delay:2.4s;}
+  .stem{fill:none;stroke:var(--sage-dark);stroke-width:3;stroke-linecap:round;stroke-dasharray:160;stroke-dashoffset:160;animation:draw-stem 1.1s ease-out forwards;}
+  .leaf{fill:var(--sage);}
+  .leaf-a{fill:var(--sage-dark);}
+  .plant-head{opacity:0;transform:translateY(10px);animation:rise-in .6s ease-out forwards;}
+  .bud-shape{fill:var(--yellow);stroke:var(--yellow-deep);stroke-width:1;}
+  .bud-seam{stroke:var(--yellow-deep);stroke-width:1;opacity:.5;}
+  .bloom-shape{fill:var(--yellow-bright);stroke:var(--yellow-deep);stroke-width:1;}
+  .bloom-seam{stroke:var(--yellow-deep);stroke-width:1;opacity:.35;}
+  .bud-g{opacity:1;transform:scale(1);transform-origin:30px 66px;transition:opacity .45s ease,transform .5s ease;}
+  .bloom-g{opacity:0;transform:scale(.55);transform-origin:30px 66px;transition:opacity .5s ease .05s,transform .65s cubic-bezier(.34,1.56,.64,1) .05s;}
+  .tulip.bloomed .bud-g{opacity:0;transform:scale(.7) translateY(4px);}
+  .tulip.bloomed .bloom-g{opacity:1;transform:scale(1);}
+  .tulip.bloomed .glow-behind{animation:none;opacity:.5;}
+
+  @keyframes draw-stem{from{stroke-dashoffset:160;}to{stroke-dashoffset:0;}}
+  @keyframes rise-in{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes hint-pulse{0%,100%{opacity:.1;}50%{opacity:.28;}}
+  @keyframes cue-bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+
+  .spark{position:fixed;width:5px;height:5px;border-radius:50%;background:var(--glow);pointer-events:none;animation:spark-float 1.1s ease-out forwards;z-index:5;}
+  @keyframes spark-float{0%{opacity:0;transform:translate(0,0) scale(.6);}15%{opacity:1;}100%{opacity:0;transform:translate(calc(var(--dx,0) * 1px),-46px) scale(1);}}
+
+  /* ---------- Hero ---------- */
+  .hero{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;}
+  .hero-title{font-family:'Fraunces',Georgia,'Times New Roman',serif;font-style:italic;font-weight:700;
+    font-size:clamp(3.4rem,15vw,9rem);line-height:.98;letter-spacing:-.015em;color:var(--cream);margin:0;
+    opacity:0;transform:translateY(14px);animation:rise-in 1.1s ease-out forwards .2s;}
+  .hero-subtitle{margin-top:26px;font-family:'Work Sans',sans-serif;font-weight:300;font-size:1.05rem;color:var(--cream-dim);
+    opacity:0;transform:translateY(8px);animation:rise-in .8s ease-out forwards 1s;}
+  .scroll-cue{margin-top:46px;display:flex;flex-direction:column;align-items:center;gap:6px;
+    font-family:'Work Sans',sans-serif;font-size:.78rem;color:var(--cream-dim);opacity:0;
+    animation:rise-in .8s ease-out forwards 1.4s, cue-bounce 2.2s ease-in-out infinite 2.4s;}
+  .scroll-cue svg{width:15px;height:15px;}
+
+  /* ---------- Garden ---------- */
+  .garden{position:relative;z-index:2;padding:40px 24px 110px;text-align:center;}
+  .garden-intro{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:400;
+    font-size:clamp(1.15rem,2.6vw,1.55rem);color:var(--cream-dim);margin:0 0 46px;}
+  .garden-grid{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-end;gap:2px 6px;max-width:940px;margin:0 auto;}
+
+  /* ---------- Poem (hidden until the garden is complete) ---------- */
+  .poem{display:none;position:relative;z-index:2;}
+  .poem.unlocked{display:block;}
+  .poem-inner{max-width:600px;margin:0 auto;padding:90px 24px 70px;opacity:0;transition:opacity 1.3s ease;}
+  .poem-inner.show{opacity:1;}
+  .stanza{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:400;
+    font-size:clamp(1.05rem,2.3vw,1.32rem);line-height:1.8;color:var(--cream-dim);text-align:center;margin:0;
+    opacity:0;transform:translateY(18px);transition:opacity 1s ease,transform 1s ease;}
+  .stanza.in-view{opacity:1;transform:translateY(0);}
+  .stanza-divider{display:flex;justify-content:center;margin:30px 0;opacity:.85;}
+  .stanza-divider svg{width:20px;height:20px;}
+  .poem-close{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:600;
+    font-size:clamp(1.5rem,4vw,2.3rem);color:var(--cream);text-align:center;margin:54px 0 0;
+    opacity:0;transform:translateY(18px);transition:opacity 1.1s ease,transform 1.1s ease;}
+  .poem-close.in-view{opacity:1;transform:translateY(0);}
+
+  .signature{position:fixed;bottom:14px;right:18px;z-index:3;font-family:'Work Sans',sans-serif;font-size:.8rem;color:var(--cream-dim);opacity:.55;}
+
+  @media (prefers-reduced-motion: reduce){
+    .stem{animation:none;stroke-dashoffset:0;}
+    .plant-head{animation:none;opacity:1;transform:none;}
+    .hero-title,.hero-subtitle{animation:none;opacity:1;transform:none;}
+    .scroll-cue{animation:none;opacity:1;}
+    .glow-behind{animation:none;opacity:.15;}
+    .tulip.bloomed .glow-behind{opacity:.5;}
+    .bud-g,.bloom-g{transition:opacity .25s linear;}
+    .spark{display:none;}
+    .stanza,.poem-close,.poem-inner{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="soft-blur" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3.5"/>
+    </filter>
+  </defs>
+</svg>
+
+<div class="stars" aria-hidden="true">
+  <span class="star" style="left:6%;top:10%;width:2px;height:2px;opacity:.45;"></span>
+  <span class="star" style="left:22%;top:6%;width:1.5px;height:1.5px;opacity:.3;"></span>
+  <span class="star" style="left:35%;top:15%;width:2.5px;height:2.5px;opacity:.5;"></span>
+  <span class="star" style="left:48%;top:4%;width:1.5px;height:1.5px;opacity:.35;"></span>
+  <span class="star" style="left:61%;top:11%;width:2px;height:2px;opacity:.4;"></span>
+  <span class="star" style="left:77%;top:7%;width:1.5px;height:1.5px;opacity:.3;"></span>
+  <span class="star" style="left:90%;top:14%;width:2.5px;height:2.5px;opacity:.5;"></span>
+  <span class="star" style="left:5%;top:25%;width:1.5px;height:1.5px;opacity:.3;"></span>
+  <span class="star" style="left:18%;top:32%;width:2px;height:2px;opacity:.4;"></span>
+  <span class="star" style="left:30%;top:22%;width:1.5px;height:1.5px;opacity:.3;"></span>
+  <span class="star" style="left:44%;top:28%;width:2px;height:2px;opacity:.45;"></span>
+  <span class="star" style="left:58%;top:20%;width:1.5px;height:1.5px;opacity:.3;"></span>
+  <span class="star" style="left:70%;top:30%;width:2.5px;height:2.5px;opacity:.5;"></span>
+  <span class="star" style="left:85%;top:24%;width:1.5px;height:1.5px;opacity:.35;"></span>
+  <span class="star" style="left:95%;top:35%;width:2px;height:2px;opacity:.4;"></span>
+  <span class="star" style="left:12%;top:42%;width:1.5px;height:1.5px;opacity:.3;"></span>
+  <span class="star" style="left:26%;top:48%;width:2px;height:2px;opacity:.35;"></span>
+  <span class="star" style="left:40%;top:40%;width:1.5px;height:1.5px;opacity:.25;"></span>
+  <span class="star" style="left:54%;top:45%;width:2px;height:2px;opacity:.3;"></span>
+  <span class="star" style="left:66%;top:38%;width:1.5px;height:1.5px;opacity:.25;"></span>
+  <span class="star" style="left:80%;top:46%;width:2px;height:2px;opacity:.3;"></span>
+  <span class="star" style="left:92%;top:50%;width:1.5px;height:1.5px;opacity:.25;"></span>
+</div>
+<div class="horizon" aria-hidden="true"></div>
+
+<section class="hero">
+  <h1 class="hero-title">Te amo.</h1>
+  <p class="hero-subtitle">Toca cada tulipán para descubrir el resto.</p>
+  <div class="scroll-cue" aria-hidden="true">
+    <span>desliza</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9l6 6 6-6"/></svg>
+  </div>
+</section>
+
+<section class="garden">
+  <p class="garden-intro">Un jardín entero, para ti.<br>Toca cada tulipán.</p>
+  <div class="garden-grid" data-garden="18"></div>
+</section>
+
+<section class="poem" id="poemSection">
+  <div class="poem-inner">
+    <p class="stanza">Te amo.<br>Lo escribo de primero<br>porque todo lo que sigue<br>es apenas el intento<br>de explicar por qué esas dos palabras<br>se me quedan cortas.</p>
+
+    <div class="stanza-divider" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20,38 C12,36 6,29 7,20 C7,17 10,15 12,17 C14,19 15,21 16,24 C17,19 18,14 20,12 C22,14 23,19 24,24 C25,21 26,19 28,17 C30,15 33,17 33,20 C34,29 28,36 20,38 Z" fill="var(--yellow)"></path></svg></div>
+
+    <p class="stanza">Dicen que basta una flor amarilla<br>para decir lo que se siente.<br>A mí no me alcanzó.<br>Necesité un jardín entero,<br>y ni así es suficiente<br>para esto que llevo dentro.</p>
+
+    <div class="stanza-divider" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20,38 C12,36 6,29 7,20 C7,17 10,15 12,17 C14,19 15,21 16,24 C17,19 18,14 20,12 C22,14 23,19 24,24 C25,21 26,19 28,17 C30,15 33,17 33,20 C34,29 28,36 20,38 Z" fill="var(--yellow)"></path></svg></div>
+
+    <p class="stanza">Porque lo que siento no es una frase<br>que se dice una vez y se guarda<br>es la marea que vuelve sin que nadie se lo pida,<br>es el sol que no negocia con la noche<br>y sale igual, todos los días, sin falta.</p>
+
+    <div class="stanza-divider" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20,38 C12,36 6,29 7,20 C7,17 10,15 12,17 C14,19 15,21 16,24 C17,19 18,14 20,12 C22,14 23,19 24,24 C25,21 26,19 28,17 C30,15 33,17 33,20 C34,29 28,36 20,38 Z" fill="var(--yellow)"></path></svg></div>
+
+    <p class="stanza">Elegí tulipanes porque son los tuyos.<br>Amarillos, porque son la luz<br>que entra sin tocar la puerta.<br>Ya los tocaste todos,<br>y viste que ninguno se cierra dos veces.<br>Así, exactamente así, es lo que siento por ti.</p>
+
+    <div class="stanza-divider" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20,38 C12,36 6,29 7,20 C7,17 10,15 12,17 C14,19 15,21 16,24 C17,19 18,14 20,12 C22,14 23,19 24,24 C25,21 26,19 28,17 C30,15 33,17 33,20 C34,29 28,36 20,38 Z" fill="var(--yellow)"></path></svg></div>
+
+    <p class="stanza">No es una flor.<br>No es un poema.<br>Es un jardín entero creciendo hacia ti,<br>y aun así se queda pequeño<br>comparado con lo que en realidad<br>me cabe en el pecho cuando pienso en tu nombre.</p>
+
+    <div class="stanza-divider" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20,38 C12,36 6,29 7,20 C7,17 10,15 12,17 C14,19 15,21 16,24 C17,19 18,14 20,12 C22,14 23,19 24,24 C25,21 26,19 28,17 C30,15 33,17 33,20 C34,29 28,36 20,38 Z" fill="var(--yellow)"></path></svg></div>
+
+    <p class="stanza">Esto no termina en un punto final.<br>Sigue en cada tulipán que ya florece,<br>sigue después de esta pantalla,<br>sigue mañana, y pasado,<br>y en todos los días que aún no tienen nombre.</p>
+
+    <p class="poem-close">Te amo. Inmensamente. Así.</p>
+  </div>
+</section>
+
+<p class="signature" aria-hidden="true">— Juan David</p>
+
+<script>
+(function(){
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var TULIP_SVG = '<svg viewBox="0 0 60 150" aria-hidden="true"><circle class="glow-behind" cx="30" cy="52" r="24"></circle><path class="stem" d="M30,150 C29,120 31,100 30,80 C29,72 30,68 30,66"></path><g class="plant-head"><path class="leaf leaf-a" d="M30,105 C20,108 10,118 8,132 C14,130 24,122 30,112 C31,110 31,107 30,105 Z"></path><path class="leaf leaf-b" d="M30,120 C40,122 50,130 52,142 C46,141 36,135 30,126 C29,124 29,122 30,120 Z"></path><g class="bud-g"><path class="bud-shape" d="M30,36 C21,38 17,48 18,58 C18,63 24,66 30,66 C36,66 42,63 42,58 C43,48 39,38 30,36 Z"></path><path class="bud-seam" d="M30,40 L30,62"></path></g><g class="bloom-g"><path class="bloom-shape" d="M30,66 C20,64 12,56 13,44 C13,40 16,38 19,40 C21,42 22,45 23,48 C24,42 26,36 30,34 C34,36 36,42 37,48 C38,45 39,42 41,40 C44,38 47,40 47,44 C48,56 40,64 30,66 Z"></path><path class="bloom-seam" d="M30,66 L30,40"></path><path class="bloom-seam" d="M23,48 L19,40"></path><path class="bloom-seam" d="M37,48 L41,40"></path></g></g></svg>';
+
+  function rand(min,max){ return Math.random()*(max-min)+min; }
+
+  var bloomedCount = 0;
+  var totalTulips = 0;
+  var poemSection = document.getElementById('poemSection');
+  var poemInner = poemSection.querySelector('.poem-inner');
+
+  function spawnSparks(btn){
+    if(reduceMotion) return;
+    var r = btn.getBoundingClientRect();
+    var ox = r.left + r.width/2;
+    var oy = r.top + r.height*0.32;
+    for(var i=0;i<5;i++){
+      (function(i){
+        var s = document.createElement('span');
+        s.className='spark';
+        var dx=(Math.random()*36-18).toFixed(1);
+        s.style.setProperty('--dx',dx);
+        s.style.left=ox+'px'; s.style.top=oy+'px';
+        s.style.animationDelay=(i*70)+'ms';
+        document.body.appendChild(s);
+        s.addEventListener('animationend',function(){ s.remove(); });
+      })(i);
+    }
+  }
+
+  function revealPoem(){
+    poemSection.classList.add('unlocked');
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        poemInner.classList.add('show');
+        poemSection.scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth', block:'start'});
+      });
+    });
+  }
+
+  function makeTulip(delayIndex){
+    var btn=document.createElement('button');
+    btn.type='button'; btn.className='tulip';
+    btn.setAttribute('aria-label','Toca para florecer');
+    btn.innerHTML=TULIP_SVG;
+    btn.style.transform='translateY('+rand(-10,10).toFixed(1)+'px) rotate('+rand(-6,6).toFixed(1)+'deg) scale('+rand(.82,1.05).toFixed(2)+')';
+    var stem=btn.querySelector('.stem');
+    var head=btn.querySelector('.plant-head');
+    var stemDelay=(delayIndex*0.06)%1.4;
+    stem.style.animationDelay=stemDelay+'s';
+    head.style.animationDelay=(stemDelay+0.7)+'s';
+    btn.addEventListener('click',function(){
+      if(btn.classList.contains('bloomed')) return;
+      btn.classList.add('bloomed');
+      spawnSparks(btn);
+      bloomedCount++;
+      if(bloomedCount===totalTulips){
+        revealPoem();
+      }
+    });
+    totalTulips++;
+    return btn;
+  }
+
+  document.querySelectorAll('[data-garden]').forEach(function(container){
+    var count=parseInt(container.getAttribute('data-garden'),10)||0;
+    for(var i=0;i<count;i++){
+      container.appendChild(makeTulip(i));
+    }
+  });
+
+  var revealTargets=document.querySelectorAll('.stanza, .poem-close');
+  if(reduceMotion || !('IntersectionObserver' in window)){
+    revealTargets.forEach(function(el){ el.classList.add('in-view'); });
+  } else {
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    },{threshold:0.3});
+    revealTargets.forEach(function(el){ io.observe(el); });
+  }
+})();
+</script>
+
+</body>
+</html>
